@@ -21,12 +21,12 @@ class Display:
     def get_photos(self, path:str):
         files = []
         for filename in os.listdir(path):
-            if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.heic')):
+            if filename.lower().endswith(('.png', '.jpg', '.jpeg')):
                 files.append(filename)
 
         return files
     
-    def display(self, images:list):
+    def display_slideshow(self, images:list, path:str):
         """Displays all images specified in a rotating slideshow.
         """
         self.display.set_backlight(1.0)
@@ -34,13 +34,13 @@ class Display:
             while True:
                 for index, image in enumerate(images):
                     try:
-                        image = Image.open(image)
+                        image = Image.open(f'{path}{image}')
                     except FileNotFoundError:
-                        image = Image.open(images[index - 1])
+                        image = Image.open(f'{path}{images[index - 1]}')
 
                     image = image.resize((self.display.width, self.display.height))
                     self.display.display(image)
-                    time.sleep(60)
+                    time.sleep(1)
         
         except KeyboardInterrupt:
             self.display.set_backlight(0.0)
